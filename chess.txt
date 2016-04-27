@@ -1,0 +1,149 @@
+                  CUI CHESS PROGRAM FOR UNIX XTERM
+			    Version 2.0
+
+Copyright (c) 2016 Walter William Karas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+(Ported from Version 1.3.1, written in the early 1990s for MS-DOS)
+
+USAGE
+
+chess <white-player> <black-player>
+
+A player (white or black) is specified as one of "U", "C1", "C2", ...
+"C6".  "U" specifies that the player's moves will be selected by the
+user.  "C1", "C2", ... "C6" specifies that the player's moves will be
+selected by the computer.  The digit (1 - 6) gives the relative
+skill level with which the computer selects the player's moves.  For
+example, the command:
+
+CHESS C2 U
+
+starts a game with the computer selecting the white player's moves (at
+skill level 2) and the user selecting the black player's moves.  The
+default for black-player is C2, and the default for white-player is U.
+It is legal for both players to be user-controlled, or for both
+players to be computer-controlled.  When playing at skill level 4, the
+computer will take several minutes to select each move.  When playing
+at skill level 5 or 6, your grandchildren may have to finish the game
+for you.  You can exit the game by hitting q or Q when it is waiting for
+keyboard input.
+
+Pieces on the chess board are represented by two letter strings.  The
+first letter is W (for a white piece) or B (for a black piece).  Here
+is the legend for the second letter:
+
+P - Pawn
+R - Rook
+N - Knight
+B - Bishop
+Q - Queen
+K - King
+
+IMPLEMENTATION
+
+The following files contain the source code for the program:
+
+brdsize.hpp
+charui.cpp
+charui.hpp
+chcharui.cpp
+chcharui.hpp
+chess.cpp
+chess.hpp
+chessui.cpp
+chessui.hpp
+cplayer.cpp
+cplayer.hpp
+main.cpp
+misc.hpp
+player.hpp
+uplayer.cpp
+uplayer.hpp
+
+Here are the important class hierarchies:
+
+                   PIECE
+                     *
+                     *
+    ************************************
+    *      *      *       *      *     *
+    *      *      *       *      *     *
+   KING  QUEEN  BISHOP  KNIGHT  ROOK  PAWN
+
+
+              PLAYER
+                *
+          **************
+          *            *
+          *            *
+   COMPUTERPLAYER  USERPLAYER
+
+
+This program uses escape sequences to interface with the screen and
+keyboard.  It could be ported to another character-oriented API by
+changing the implementation of CHARUSERIFACE.  It could be ported to a
+GUI API by changing the implementation of CHESSUSERIFACE.
+
+ALGORITHM FOR COMPUTER PLAYER
+
+The algorithm for the computer player appears in the play() member
+function of COMPUTERPLAYER.  The first step is to find the list of
+possible moves which are predicted to get the opponent in checkmate,
+or provide the most material gain (or minimize material loss).  This
+prediction is done by looking ahead several moves.  The number of
+moves of look-ahead is 2 for skill level 1, 3 for skill level 2, 4
+for skill level 3, etc.  The look-ahead is performed by the recursive
+findBestMove() member function of the BOARD class.  To select among
+the list of best moves, a "coverage/threat" metric is used.  This
+metric measures how much of the board will be "attackable" after the
+move, giving extra points for blocking moves by the opponent's king.
+It also encourages moving pieces closer to the opponent king.
+
+Please send all comments and bug reports to:
+
+Walt Karas
+wkaras at yahoo dot com
+
+This program is no Deep Thought, and can easily be beaten by a good
+human player.
+
+VERSION INFORMATION
+
+Version 1.0
+o  Initial release.
+
+Version 1.1
+o  Removal of obscure bug in Computer Player play() member function.
+o  Fine tuning of best development metric.
+o  Removal of useless "usage" printing code.
+o  Removal of bug with en passant move logic which caused pawns to
+   "disappear" from internal representation of board, although they
+   were still on the screen.
+
+Version 1.2
+o  Small changes, essentially cosmetic in nature.
+
+Version 1.3
+o  DOS executable now included with source code.
+o  Work around added for Turbo C++ 3.0 bug.
+
+Version 1.3.1
+o  Minor changes to documentation.
+
+Version 2.0
+o  Port from MS-DOS to Unix xterm.
