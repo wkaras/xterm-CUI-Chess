@@ -50,16 +50,16 @@ LOCAL int coverage
     // set covered flag on all covered locations
     for (where.row = 0; where.row < NUMROWS; where.row++)
       for (where.col = 0; where.col < NUMCOLS; where.col++)
-	{
-	  if (board.whatPiece(where))
-	    if ((board.whatPiece(where)->whatColor() == color) &&
-	        (board.whatPiece(where)->whatType() != TYPEPAWN))
-	      {
-		board.whatPiece(where)->legalMoves(where, board, moves);
-		for (m = 0; m < moves.nMoves; m++)
-		  map[moves.end[m].row][moves.end[m].col] = COVERED;
-	      }
-	}
+        {
+          if (board.whatPiece(where))
+            if ((board.whatPiece(where)->whatColor() == color) &&
+                (board.whatPiece(where)->whatType() != TYPEPAWN))
+              {
+                board.whatPiece(where)->legalMoves(where, board, moves);
+                for (m = 0; m < moves.nMoves; m++)
+                  map[moves.end[m].row][moves.end[m].col] = COVERED;
+              }
+        }
 
     // flag locations to which enemy king could move
     board.whatPiece(whereEnemyKing)->
@@ -70,15 +70,15 @@ LOCAL int coverage
     // accumulate coverage points
     for (where.row = 0; where.row < NUMROWS; where.row++)
       for (where.col = 0; where.col < NUMCOLS; where.col++)
-	{
+        {
           if (map[where.row][where.col] & COVERED)
-	    {
-	      if (map[where.row][where.col] & KINGAREA)
-		result += 20;
-	      else
-		result += 1;
-	    }
-	}
+            {
+              if (map[where.row][where.col] & KINGAREA)
+                result += 20;
+              else
+                result += 1;
+            }
+        }
 
     return(result);
   }
@@ -93,12 +93,12 @@ LOCAL POSITION whereKing
 
     for (where.row = 0; ; where.row++)
       for (where.col = 0; where.col < NUMCOLS; where.col++)
-	{
-	  if (board.whatPiece(where))
-	    if (board.whatPiece(where)->whatColor() == color)
-	      if (board.whatPiece(where)->whatType() == TYPEKING)
-		return(where);
-	}
+        {
+          if (board.whatPiece(where))
+            if (board.whatPiece(where)->whatColor() == color)
+              if (board.whatPiece(where)->whatType() == TYPEKING)
+                return(where);
+        }
   }
 
 // positive difference between two integers
@@ -157,47 +157,47 @@ LOCAL int bestDevelopMove
 
     for (testIndex = 0; testIndex < bestMoves.nMoves; testIndex++)
       {
-	// engage in castlephilia
-	if (bestMoves.move[testIndex].type != NORMALMOVE)
-	  return(testIndex);
+        // engage in castlephilia
+        if (bestMoves.move[testIndex].type != NORMALMOVE)
+          return(testIndex);
 
-	board.doMove
-	  (
-	    bestMoves.move[testIndex].start,
-	    bestMoves.move[testIndex].end,
-	    undoData
-	  );
+        board.doMove
+          (
+            bestMoves.move[testIndex].start,
+            bestMoves.move[testIndex].end,
+            undoData
+          );
 
-	if (bestMoves.move[testIndex].promoteType != TYPENOPIECE)
-	  board.promote(bestMoves.move[testIndex].end,
-			bestMoves.move[testIndex].promoteType);
+        if (bestMoves.move[testIndex].promoteType != TYPENOPIECE)
+          board.promote(bestMoves.move[testIndex].end,
+                        bestMoves.move[testIndex].promoteType);
 
-	testMetric = undoData.capturedPiece ?
-		     undoData.capturedPiece->whatValue() * 16 : 0;
-	testMetric += coverage(board, moveColor, whereEnemyKing) +
-		      threatChange
-		        (
-			  bestMoves.move[testIndex].start,
-			  bestMoves.move[testIndex].end,
-			  whereEnemyKing,
-			  board.whatPiece(bestMoves.move[testIndex].end)
-		        ) * 4;
+        testMetric = undoData.capturedPiece ?
+                     undoData.capturedPiece->whatValue() * 16 : 0;
+        testMetric += coverage(board, moveColor, whereEnemyKing) +
+                      threatChange
+                        (
+                          bestMoves.move[testIndex].start,
+                          bestMoves.move[testIndex].end,
+                          whereEnemyKing,
+                          board.whatPiece(bestMoves.move[testIndex].end)
+                        ) * 4;
 
-	if (testMetric > bestMetric)
-	  {
-	    bestIndex = testIndex;
-	    bestMetric = testMetric;
-	  }
+        if (testMetric > bestMetric)
+          {
+            bestIndex = testIndex;
+            bestMetric = testMetric;
+          }
 
-	if (bestMoves.move[testIndex].promoteType != TYPENOPIECE)
-	  board.restorePawn(bestMoves.move[testIndex].end);
+        if (bestMoves.move[testIndex].promoteType != TYPENOPIECE)
+          board.restorePawn(bestMoves.move[testIndex].end);
 
-	board.undoMove
-	  (
-	    bestMoves.move[testIndex].end,
-	    bestMoves.move[testIndex].start,
-	    undoData
-	  );
+        board.undoMove
+          (
+            bestMoves.move[testIndex].end,
+            bestMoves.move[testIndex].start,
+            undoData
+          );
       }
 
     return(bestIndex);
@@ -213,22 +213,22 @@ GAMESTATUS COMPUTERPLAYER::play(BOARD &board) const
     board.findBestMoves(lookAhead, whatColor(), metric, &bestMoves);
     if (metric.kingSituation[whatColor()] != KINGOK)
       {
-	// see if checkmate/stalemate current or predicted
-	if (lookAhead > 2)
-	  board.findBestMoves(2, whatColor(), metric, &bestMoves);
+        // see if checkmate/stalemate current or predicted
+        if (lookAhead > 2)
+          board.findBestMoves(2, whatColor(), metric, &bestMoves);
 
-	if (metric.kingSituation[whatColor()] == KINGLOST)
-	  {
-	    ChessUI.clearMessage();
-	    ChessUI.mated(whatColor());
-	    return(GAMEOVER);
-	  }
-	else if (metric.kingSituation[whatColor()] == STALEMATE)
-	  {
-	    ChessUI.clearMessage();
-	    ChessUI.staleMated(whatColor());
-	    return(GAMEOVER);
-	  }
+        if (metric.kingSituation[whatColor()] == KINGLOST)
+          {
+            ChessUI.clearMessage();
+            ChessUI.mated(whatColor());
+            return(GAMEOVER);
+          }
+        else if (metric.kingSituation[whatColor()] == STALEMATE)
+          {
+            ChessUI.clearMessage();
+            ChessUI.staleMated(whatColor());
+            return(GAMEOVER);
+          }
       }
 
     best = bestDevelopMove(board, whatColor(), bestMoves);

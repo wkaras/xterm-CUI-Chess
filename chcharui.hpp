@@ -59,10 +59,10 @@ class CHESSCHARUSERIFACE
         // same as textList parameter in first showMessage
         const char **textList,
         // list of accepted character keys.  if null, any key is
-	// accepted.
+        // accepted.
         const char *keyList,
         // if not null, pointer to variable to set to the index of
-	// the key pressed
+        // the key pressed
         uint *keyIndex
       );
 

@@ -65,28 +65,28 @@ void CHESSCHARUSERIFACE::initScreen(void)
     screen.row = 0;
     for (board.row = 0; board.row < NUMROWS; board.row++)
       for (position.row = 0; position.row < POSITIONHEIGHT; position.row++)
-	{
-	  screen.col = 0;
-	  for (board.col = 0; board.col < NUMCOLS; board.col++)
-	    {
-	      inverse = isWhite(board);
-	      for (position.col = 0; position.col < POSITIONWIDTH;
-		   position.col++)
-		{
-		  CharUI.showChar(screen, ' ', inverse);
-		  screen.col++;
-		}
-	    }
-	  screen.row++;
-	}
+        {
+          screen.col = 0;
+          for (board.col = 0; board.col < NUMCOLS; board.col++)
+            {
+              inverse = isWhite(board);
+              for (position.col = 0; position.col < POSITIONWIDTH;
+                   position.col++)
+                {
+                  CharUI.showChar(screen, ' ', inverse);
+                  screen.col++;
+                }
+            }
+          screen.row++;
+        }
 
     // initialize internal representation of displayed board
     for (board.row = 0; board.row < NUMROWS; board.row++)
       for (board.col = 0; board.col < NUMCOLS; board.col++)
-	{
-	  displayBoard[board.row][board.col].pieceText = emptyText;
-	  displayBoard[board.row][board.col].selected = FALSE;
-	}
+        {
+          displayBoard[board.row][board.col].pieceText = emptyText;
+          displayBoard[board.row][board.col].selected = FALSE;
+        }
 
     return;
   }
@@ -101,9 +101,9 @@ LOCAL void showBoardText(POSITION where, const char *text, BOOL inverse)
 
     while (*text)
       {
-	CharUI.showChar(where, *text, inverse);
-	text++;
-	where.col++;
+        CharUI.showChar(where, *text, inverse);
+        text++;
+        where.col++;
       }
 
     return;
@@ -140,9 +140,9 @@ LOCAL void clearLastMsg(void)
 
     while (row < firstBlankMsgRow)
       {
-	for (col = MSGSTARTCOL; col <= MSGENDCOL; col++)
-	  CharUI.showChar(row, col, ' ', FALSE);
-	row++;
+        for (col = MSGSTARTCOL; col <= MSGENDCOL; col++)
+          CharUI.showChar(row, col, ' ', FALSE);
+        row++;
       }
     firstBlankMsgRow = MSGSTARTROW;
   }
@@ -159,8 +159,8 @@ LOCAL inline void incTextList
     index++;
     if (!(*textList)[index])
       {
-	textList++;
-	index = 0;
+        textList++;
+        index = 0;
       }
 
     return;
@@ -182,18 +182,18 @@ LOCAL int toEndWord
 
     while ((*textList)[index] == ' ')
       {
-	incTextList(textList, index);
-	nChars++;
-	if (!*textList)
-	  return(nChars);
+        incTextList(textList, index);
+        nChars++;
+        if (!*textList)
+          return(nChars);
       }
 
     while ((*textList)[index] != ' ')
       {
-	incTextList(textList, index);
-	nChars++;
-	if (!*textList)
-	  return(nChars);
+        incTextList(textList, index);
+        nChars++;
+        if (!*textList)
+          return(nChars);
       }
 
     return(nChars);
@@ -205,6 +205,23 @@ LOCAL void displayMsg
     const char **textList
   )
   {
+    LOCAL BOOL xMsgShown = false;
+
+    if (!xMsgShown)
+      {
+        // Must come before call to showMessage, which will call this
+        // function recursively.
+        xMsgShown = true;
+
+        LOCAL const char xMsg[] =
+          "Hit the 'X' key at any prompt to exit the program.  Hit any key"
+          " to continue:";
+
+        LOCAL const char *xMsgList[] = { xMsg, 0 };
+
+        ChessCharUI.showMessage(xMsgList, 0, 0);
+      }
+
     int row = MSGSTARTROW, col = MSGSTARTCOL;
     int showIndex = 0, lookIndex = 0, nChars;
     const char **lookList = textList;
@@ -213,25 +230,25 @@ LOCAL void displayMsg
 
     while (*textList)
       {
-	nChars = toEndWord(lookList, lookIndex);
+        nChars = toEndWord(lookList, lookIndex);
 
-	if ((col + nChars) > (MSGENDCOL + 1))
-	  {
-	    // go to next line in message area
-	    row++;
-	    col = MSGSTARTCOL;
-	    while ((*textList)[showIndex] == ' ')
-	      incTextList(textList, showIndex);
-	  }
+        if ((col + nChars) > (MSGENDCOL + 1))
+          {
+            // go to next line in message area
+            row++;
+            col = MSGSTARTCOL;
+            while ((*textList)[showIndex] == ' ')
+              incTextList(textList, showIndex);
+          }
 
-	for ( ; ; )
-	  {
-	    if (textList == lookList)
-	      if (showIndex == lookIndex)
-		break;
-	    CharUI.showChar(row, col++, (*textList)[showIndex], FALSE);
-	    incTextList(textList, showIndex);
-	  }
+        for ( ; ; )
+          {
+            if (textList == lookList)
+              if (showIndex == lookIndex)
+                break;
+            CharUI.showChar(row, col++, (*textList)[showIndex], FALSE);
+            incTextList(textList, showIndex);
+          }
       }
 
     firstBlankMsgRow = row + 1;
@@ -269,22 +286,22 @@ BOOL CHESSCHARUSERIFACE::showMessage
 
     for ( ; ; )
       {
-	keyPressed = CharUI.readKey();
+        keyPressed = CharUI.readKey();
 
         if (keyPressed == KEYEXIT)
-	  return(FALSE);
+          return(FALSE);
 
-	if (!keyList)
-	  return(TRUE);
+        if (!keyList)
+          return(TRUE);
 
-	for (i = 0; keyList[i]; i++)
-	  {
-	    if (keyList[i] == (char) keyPressed)
-	      {
-		*keyIndex = i;
-		return(TRUE);
-	      }
-	  }
+        for (i = 0; keyList[i]; i++)
+          {
+            if (keyList[i] == (char) keyPressed)
+              {
+                *keyIndex = i;
+                return(TRUE);
+              }
+          }
       }
   }
 
@@ -292,9 +309,9 @@ void CHESSCHARUSERIFACE::setSelect(POSITION whereBoard)
   {
     showBoardText
       (
-	whereBoard,
-	displayBoard[whereBoard.row][whereBoard.col].pieceText,
-	!isWhite(whereBoard)
+        whereBoard,
+        displayBoard[whereBoard.row][whereBoard.col].pieceText,
+        !isWhite(whereBoard)
       );
     displayBoard[whereBoard.row][whereBoard.col].selected = TRUE;
 
@@ -305,9 +322,9 @@ void CHESSCHARUSERIFACE::clearSelect(POSITION whereBoard)
   {
     showBoardText
       (
-	whereBoard,
-	displayBoard[whereBoard.row][whereBoard.col].pieceText,
-	isWhite(whereBoard)
+        whereBoard,
+        displayBoard[whereBoard.row][whereBoard.col].pieceText,
+        isWhite(whereBoard)
       );
     displayBoard[whereBoard.row][whereBoard.col].selected = FALSE;
 
@@ -326,40 +343,40 @@ BOOL CHESSCHARUSERIFACE::selectPosition
 
     for ( ; ; )
       {
-	showBoardText
-	  (
-	    whereBoard,
-	    displayBoard[whereBoard.row][whereBoard.col].pieceText,
-	    !isWhite(whereBoard)
-	  );
-	keyPressed = CharUI.readKey();
+        showBoardText
+          (
+            whereBoard,
+            displayBoard[whereBoard.row][whereBoard.col].pieceText,
+            !isWhite(whereBoard)
+          );
+        keyPressed = CharUI.readKey();
         if (keyPressed == KEYENTER)
-	  {
-	    displayBoard[whereBoard.row][whereBoard.col].selected =
-	      TRUE;
-	    return(TRUE);
-	  }
-	if (!displayBoard[whereBoard.row][whereBoard.col].selected)
-	  showBoardText
-	    (
-	      whereBoard,
-	      displayBoard[whereBoard.row][whereBoard.col].pieceText,
-	      isWhite(whereBoard)
-	    );
+          {
+            displayBoard[whereBoard.row][whereBoard.col].selected =
+              TRUE;
+            return(TRUE);
+          }
+        if (!displayBoard[whereBoard.row][whereBoard.col].selected)
+          showBoardText
+            (
+              whereBoard,
+              displayBoard[whereBoard.row][whereBoard.col].pieceText,
+              isWhite(whereBoard)
+            );
 
         if (keyPressed == KEYEXIT)
-	  return(FALSE);
+          return(FALSE);
 
-	if ((keyPressed == KEYUP) && (whereBoard.row != 0))
-	  whereBoard.row--;
-	else if ((keyPressed == KEYDOWN) &&
+        if ((keyPressed == KEYUP) && (whereBoard.row != 0))
+          whereBoard.row--;
+        else if ((keyPressed == KEYDOWN) &&
                  (whereBoard.row != (NUMROWS - 1)))
-	  whereBoard.row++;
-	else if ((keyPressed == KEYLEFT) &&
+          whereBoard.row++;
+        else if ((keyPressed == KEYLEFT) &&
                  (whereBoard.col != 0))
-	  whereBoard.col--;
-	else if ((keyPressed == KEYRIGHT) &&
+          whereBoard.col--;
+        else if ((keyPressed == KEYRIGHT) &&
                  (whereBoard.col != (NUMCOLS - 1)))
-	  whereBoard.col++;
+          whereBoard.col++;
       }
   }

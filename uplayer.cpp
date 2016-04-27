@@ -29,15 +29,15 @@ GAMESTATUS USERPLAYER::play(BOARD &board) const
     switch (metric.kingSituation[whatColor()])
       {
       case KINGLOST:
-	ChessUI.mated(whatColor());
-	return(GAMEOVER);
+        ChessUI.mated(whatColor());
+        return(GAMEOVER);
 
       case STALEMATE:
-	ChessUI.staleMated(whatColor());
-	return(GAMEOVER);
+        ChessUI.staleMated(whatColor());
+        return(GAMEOVER);
 
       case KINGOK:
-	break;
+        break;
       }
 
     if (!ChessUI.userMove(board, whatColor()))

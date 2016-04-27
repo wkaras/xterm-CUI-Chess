@@ -33,14 +33,14 @@ class CHARUSERIFACE
     // show a character on the screen
     CLASSMEMBER void showChar
       (
-	// position to show the character at
+        // position to show the character at
         int row, int col,
         // character to show
         char c,
-	// display character in inverse-video?
+        // display character in inverse-video?
         BOOL inverse
       );
-	
+        
     CLASSMEMBER void showChar(POSITION p, char c, BOOL inverse)
       { showChar(p.row, p.col, c, inverse); return; }
 

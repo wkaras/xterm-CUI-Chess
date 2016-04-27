@@ -42,23 +42,23 @@ LOCAL const char *pieceAbbrev
     if (color == WHITE)
       switch (type)
         {
-	case TYPEKING:   return("WK");
-	case TYPEQUEEN:  return("WQ");
-	case TYPEBISHOP: return("WB");
-	case TYPEKNIGHT: return("WN");
-	case TYPEROOK:   return("WR");
-	case TYPEPAWN:   return("WP");
-	}
+        case TYPEKING:   return("WK");
+        case TYPEQUEEN:  return("WQ");
+        case TYPEBISHOP: return("WB");
+        case TYPEKNIGHT: return("WN");
+        case TYPEROOK:   return("WR");
+        case TYPEPAWN:   return("WP");
+        }
     else
       switch (type)
         {
-	case TYPEKING:   return("BK");
-	case TYPEQUEEN:  return("BQ");
-	case TYPEBISHOP: return("BB");
-	case TYPEKNIGHT: return("BN");
-	case TYPEROOK:   return("BR");
-	case TYPEPAWN:   return("BP");
-	}
+        case TYPEKING:   return("BK");
+        case TYPEQUEEN:  return("BQ");
+        case TYPEBISHOP: return("BB");
+        case TYPEKNIGHT: return("BN");
+        case TYPEROOK:   return("BR");
+        case TYPEPAWN:   return("BP");
+        }
     return(""); // dummy return
   }
 
@@ -83,28 +83,28 @@ LOCAL void pieceText
     switch (type)
       {
       case TYPEKING:
-	*textList = kingText;
-	return;
+        *textList = kingText;
+        return;
 
       case TYPEQUEEN:
-	*textList = queenText;
-	return;
+        *textList = queenText;
+        return;
 
       case TYPEBISHOP:
-	*textList = bishopText;
-	return;
+        *textList = bishopText;
+        return;
 
       case TYPEKNIGHT:
-	*textList = knightText;
-	return;
+        *textList = knightText;
+        return;
 
       case TYPEROOK:
-	*textList = rookText;
-	return;
+        *textList = rookText;
+        return;
 
       case TYPEPAWN:
-	*textList = pawnText;
-	return;
+        *textList = pawnText;
+        return;
       }
   }
 
@@ -280,15 +280,15 @@ void CHESSUSERIFACE::init(const BOARD &board)
 
     for (row = 0; row < NUMROWS; row++)
       for (col = 0; col < NUMCOLS; col++)
-	{
-	  p = board.whatPiece(row, col);
-	  if (p)
-	    ChessCharUI.showPiece
-	      (
-		POSITION(row, col),
-		pieceAbbrev(p->whatColor(), p->whatType())
-	      );
-	}
+        {
+          p = board.whatPiece(row, col);
+          if (p)
+            ChessCharUI.showPiece
+              (
+                POSITION(row, col),
+                pieceAbbrev(p->whatColor(), p->whatType())
+              );
+        }
 
     return;
   }
@@ -322,113 +322,113 @@ BOOL CHESSUSERIFACE::userMove(BOARD &board, PIECECOLOR color)
     // loop to get legal move
     for ( ; ; )
       {
-	// loop to get piece to move
-	for ( ; ; )
-	  {
-	    start.row = start.col = 0;
-	    if (!ChessCharUI.selectPosition(selectPiece, start))
-	      return(FALSE);
+        // loop to get piece to move
+        for ( ; ; )
+          {
+            start.row = start.col = 0;
+            if (!ChessCharUI.selectPosition(selectPiece, start))
+              return(FALSE);
 
-	    p = board.whatPiece(start);
-	    if (p)
-	      if (p->whatColor() == color)
-		break;
+            p = board.whatPiece(start);
+            if (p)
+              if (p->whatColor() == color)
+                break;
 
-	    if (!ChessCharUI.showMessage(illegalSelection,
-					 (char *) 0, (uint *) 0))
-	      return(FALSE);
+            if (!ChessCharUI.showMessage(illegalSelection,
+                                         (char *) 0, (uint *) 0))
+              return(FALSE);
 
-	    ChessCharUI.clearSelect(start);
-	  }
+            ChessCharUI.clearSelect(start);
+          }
 
-	if (board.userCanCastle(QUEENSIDECASTLE, color))
-	  if ((p->whatType() == TYPEKING) ||
+        if (board.userCanCastle(QUEENSIDECASTLE, color))
+          if ((p->whatType() == TYPEKING) ||
               ((p->whatType() == TYPEROOK) && (start.row == 0)))
-	    {
-	      if (!ChessCharUI.showMessage(castleQueenRook,
-					   yesNoAnswer, &keyIndex))
-		return(FALSE);
-	      if ((keyIndex / 2) == YESINDEX)
-		{
-		  ChessCharUI.clearSelect(start);
-		  board.castle(QUEENSIDECASTLE, color, dummy);
-		  ChessCharUI.clearPiece(POSITION(0, start.col));
-		  ChessCharUI.showPiece
-		    (
-		      POSITION(3, start.col),
-		      pieceAbbrev(color, TYPEROOK)
-		    );
-		  ChessCharUI.clearPiece(POSITION(4, start.col));
-		  ChessCharUI.showPiece
-		    (
-		      POSITION(2, start.col),
-		      pieceAbbrev(color, TYPEKING)
-		    );
-		  return(TRUE);
-		}
-	    }
+            {
+              if (!ChessCharUI.showMessage(castleQueenRook,
+                                           yesNoAnswer, &keyIndex))
+                return(FALSE);
+              if ((keyIndex / 2) == YESINDEX)
+                {
+                  ChessCharUI.clearSelect(start);
+                  board.castle(QUEENSIDECASTLE, color, dummy);
+                  ChessCharUI.clearPiece(POSITION(0, start.col));
+                  ChessCharUI.showPiece
+                    (
+                      POSITION(3, start.col),
+                      pieceAbbrev(color, TYPEROOK)
+                    );
+                  ChessCharUI.clearPiece(POSITION(4, start.col));
+                  ChessCharUI.showPiece
+                    (
+                      POSITION(2, start.col),
+                      pieceAbbrev(color, TYPEKING)
+                    );
+                  return(TRUE);
+                }
+            }
 
-	if (board.userCanCastle(KINGSIDECASTLE, color))
-	  if ((p->whatType() == TYPEKING) ||
+        if (board.userCanCastle(KINGSIDECASTLE, color))
+          if ((p->whatType() == TYPEKING) ||
               ((p->whatType() == TYPEROOK) && (start.row == 7)))
-	    {
-	      if (!ChessCharUI.showMessage(castleKingRook,
-					   yesNoAnswer, &keyIndex))
-		return(FALSE);
-	      if ((keyIndex / 2) == YESINDEX)
-		{
-		  ChessCharUI.clearSelect(start);
-		  board.castle(KINGSIDECASTLE, color, dummy);
-		  ChessCharUI.clearPiece(POSITION(7, start.col));
-		  ChessCharUI.showPiece
-		    (
-		      POSITION(5, start.col),
-		      pieceAbbrev(color, TYPEROOK)
-		    );
-		  ChessCharUI.clearPiece(POSITION(4, start.col));
-		  ChessCharUI.showPiece
-		    (
-		      POSITION(6, start.col),
-		      pieceAbbrev(color, TYPEKING)
-		    );
-		  return(TRUE);
-		}
-	    }
+            {
+              if (!ChessCharUI.showMessage(castleKingRook,
+                                           yesNoAnswer, &keyIndex))
+                return(FALSE);
+              if ((keyIndex / 2) == YESINDEX)
+                {
+                  ChessCharUI.clearSelect(start);
+                  board.castle(KINGSIDECASTLE, color, dummy);
+                  ChessCharUI.clearPiece(POSITION(7, start.col));
+                  ChessCharUI.showPiece
+                    (
+                      POSITION(5, start.col),
+                      pieceAbbrev(color, TYPEROOK)
+                    );
+                  ChessCharUI.clearPiece(POSITION(4, start.col));
+                  ChessCharUI.showPiece
+                    (
+                      POSITION(6, start.col),
+                      pieceAbbrev(color, TYPEKING)
+                    );
+                  return(TRUE);
+                }
+            }
 
-	end = start;
-	if (!ChessCharUI.selectPosition(selectDest, end))
-	  return(FALSE);
+        end = start;
+        if (!ChessCharUI.selectPosition(selectDest, end))
+          return(FALSE);
 
-	moveStatus = board.doUserMove
-		       (
-			 start,
-			 end
-		       );
+        moveStatus = board.doUserMove
+                       (
+                         start,
+                         end
+                       );
 
-	if ((moveStatus.status == MOVEDONE) ||
-	    (moveStatus.status == MOVEENPASSANT))
-	  break;
+        if ((moveStatus.status == MOVEDONE) ||
+            (moveStatus.status == MOVEENPASSANT))
+          break;
 
-	if (moveStatus.status == ILLEGALMOVE)
-	  {
-	    if (!ChessCharUI.showMessage(moveIllegal, (char *) 0,
-					 (uint *) 0))
-	      return(FALSE);
-	  }
-	else // king would be taken
-	  {
-	    pieceText
-	      (
-		OtherColor(color),
-		board.whatPiece(moveStatus.dangerToKing)->whatType(),
-		wouldLoseKing + DANGERINDEX
-	      );
-	    if (!ChessCharUI.showMessage(wouldLoseKing, (char *) 0,
-					 (uint *) 0))
-	      return(FALSE);
-	  }
-	ChessCharUI.clearSelect(start);
-	ChessCharUI.clearSelect(end);
+        if (moveStatus.status == ILLEGALMOVE)
+          {
+            if (!ChessCharUI.showMessage(moveIllegal, (char *) 0,
+                                         (uint *) 0))
+              return(FALSE);
+          }
+        else // king would be taken
+          {
+            pieceText
+              (
+                OtherColor(color),
+                board.whatPiece(moveStatus.dangerToKing)->whatType(),
+                wouldLoseKing + DANGERINDEX
+              );
+            if (!ChessCharUI.showMessage(wouldLoseKing, (char *) 0,
+                                         (uint *) 0))
+              return(FALSE);
+          }
+        ChessCharUI.clearSelect(start);
+        ChessCharUI.clearSelect(end);
 
       } // end loop to get legal move
 
@@ -439,23 +439,23 @@ BOOL CHESSUSERIFACE::userMove(BOARD &board, PIECECOLOR color)
       ChessCharUI.clearPiece(POSITION(end.row, start.col));
     ChessCharUI.showPiece
       (
-	end,
-	pieceAbbrev(color, p->whatType())
+        end,
+        pieceAbbrev(color, p->whatType())
       );
 
     if (board.canPromote(end))
       {
-	if (!ChessCharUI.showMessage(promoteToWhat, promoteOptions,
-				     &keyIndex))
-	  return(FALSE);
-	keyIndex /= 2;
-	board.promote(end, promoteType[keyIndex]);
-	ChessCharUI.clearPiece(end);
-	ChessCharUI.showPiece
-	  (
-	    end,
-	    pieceAbbrev(color, promoteType[keyIndex])
-	  );
+        if (!ChessCharUI.showMessage(promoteToWhat, promoteOptions,
+                                     &keyIndex))
+          return(FALSE);
+        keyIndex /= 2;
+        board.promote(end, promoteType[keyIndex]);
+        ChessCharUI.clearPiece(end);
+        ChessCharUI.showPiece
+          (
+            end,
+            pieceAbbrev(color, promoteType[keyIndex])
+          );
       }
     ChessCharUI.clearSelect(end);
 
@@ -491,129 +491,129 @@ BOOL CHESSUSERIFACE::computerMove
     switch (moveInfo.type)
       {
       case KINGSIDECASTLE:
-	board.castle(KINGSIDECASTLE, color, undoData);
-	ChessCharUI.clearPiece(POSITION(7, backCol));
-	ChessCharUI.clearPiece(POSITION(4, backCol));
-	ChessCharUI.showPiece
-	  (
-	    POSITION(5, backCol),
-	    pieceAbbrev(color, TYPEROOK)
-	  );
-	ChessCharUI.showPiece
-	  (
-	    POSITION(6, backCol),
-	    pieceAbbrev(color, TYPEKING)
-	  );
-	ChessCharUI.setSelect(POSITION(5, backCol));
-	ChessCharUI.setSelect(POSITION(6, backCol));
-	doCastleKingRook[CASTLECOLORINDEX] = colorText(color);
-	if (!ChessCharUI.showMessage(doCastleKingRook,
-				     (char *) 0, (uint *) 0))
-	  return(FALSE);
-	ChessCharUI.clearSelect(POSITION(5, backCol));
-	ChessCharUI.clearSelect(POSITION(6, backCol));
-	return(TRUE);
-	
+        board.castle(KINGSIDECASTLE, color, undoData);
+        ChessCharUI.clearPiece(POSITION(7, backCol));
+        ChessCharUI.clearPiece(POSITION(4, backCol));
+        ChessCharUI.showPiece
+          (
+            POSITION(5, backCol),
+            pieceAbbrev(color, TYPEROOK)
+          );
+        ChessCharUI.showPiece
+          (
+            POSITION(6, backCol),
+            pieceAbbrev(color, TYPEKING)
+          );
+        ChessCharUI.setSelect(POSITION(5, backCol));
+        ChessCharUI.setSelect(POSITION(6, backCol));
+        doCastleKingRook[CASTLECOLORINDEX] = colorText(color);
+        if (!ChessCharUI.showMessage(doCastleKingRook,
+                                     (char *) 0, (uint *) 0))
+          return(FALSE);
+        ChessCharUI.clearSelect(POSITION(5, backCol));
+        ChessCharUI.clearSelect(POSITION(6, backCol));
+        return(TRUE);
+        
       case QUEENSIDECASTLE:
-	board.castle(QUEENSIDECASTLE, color, undoData);
-	ChessCharUI.clearPiece(POSITION(0, backCol));
-	ChessCharUI.clearPiece(POSITION(4, backCol));
-	ChessCharUI.showPiece
-	  (
-	    POSITION(3, backCol),
-	    pieceAbbrev(color, TYPEROOK)
-	  );
-	ChessCharUI.showPiece
-	  (
-	    POSITION(2, backCol),
-	    pieceAbbrev(color, TYPEKING)
-	  );
-	ChessCharUI.setSelect(POSITION(3, backCol));
-	ChessCharUI.setSelect(POSITION(2, backCol));
-	doCastleQueenRook[CASTLECOLORINDEX] = colorText(color);
-	if (!ChessCharUI.showMessage(doCastleQueenRook,
-				     (char *) 0, (uint *) 0))
-	  return(FALSE);
-	ChessCharUI.clearSelect(POSITION(3, backCol));
-	ChessCharUI.clearSelect(POSITION(2, backCol));
-	return(TRUE);
-	
+        board.castle(QUEENSIDECASTLE, color, undoData);
+        ChessCharUI.clearPiece(POSITION(0, backCol));
+        ChessCharUI.clearPiece(POSITION(4, backCol));
+        ChessCharUI.showPiece
+          (
+            POSITION(3, backCol),
+            pieceAbbrev(color, TYPEROOK)
+          );
+        ChessCharUI.showPiece
+          (
+            POSITION(2, backCol),
+            pieceAbbrev(color, TYPEKING)
+          );
+        ChessCharUI.setSelect(POSITION(3, backCol));
+        ChessCharUI.setSelect(POSITION(2, backCol));
+        doCastleQueenRook[CASTLECOLORINDEX] = colorText(color);
+        if (!ChessCharUI.showMessage(doCastleQueenRook,
+                                     (char *) 0, (uint *) 0))
+          return(FALSE);
+        ChessCharUI.clearSelect(POSITION(3, backCol));
+        ChessCharUI.clearSelect(POSITION(2, backCol));
+        return(TRUE);
+        
       case NORMALMOVE:
-	board.doMove(moveInfo.start, moveInfo.end, undoData);
-	ChessCharUI.clearPiece(moveInfo.start);
-	ChessCharUI.clearPiece(moveInfo.end);
-	if (undoData.enPassantEffect == ENPASSANTCAPTURE)
-	  ChessCharUI.clearPiece(POSITION(moveInfo.end.row,
-					  moveInfo.start.col));
-	ChessCharUI.showPiece
-	  (
-	    moveInfo.end,
-	    pieceAbbrev(color,
-		        board.whatPiece(moveInfo.end)->whatType())
-	  );
-	ChessCharUI.setSelect(moveInfo.start);
-	ChessCharUI.setSelect(moveInfo.end);
+        board.doMove(moveInfo.start, moveInfo.end, undoData);
+        ChessCharUI.clearPiece(moveInfo.start);
+        ChessCharUI.clearPiece(moveInfo.end);
+        if (undoData.enPassantEffect == ENPASSANTCAPTURE)
+          ChessCharUI.clearPiece(POSITION(moveInfo.end.row,
+                                          moveInfo.start.col));
+        ChessCharUI.showPiece
+          (
+            moveInfo.end,
+            pieceAbbrev(color,
+                        board.whatPiece(moveInfo.end)->whatType())
+          );
+        ChessCharUI.setSelect(moveInfo.start);
+        ChessCharUI.setSelect(moveInfo.end);
 
-	if (undoData.capturedPiece)
-	  {
-	    whatMovedCaptured[CAPTURINGCOLORINDEX] = colorText(color);
-	    pieceText
-	      (
-		color,
-		board.whatPiece(moveInfo.end)->whatType(),
-		whatMovedCaptured + CAPTURINGPIECEINDEX
-	      );
-	    pieceText
-	      (
-		OtherColor(color),
-		undoData.capturedPiece->whatType(),
-		whatMovedCaptured + CAPTUREDPIECEINDEX
-	      );
+        if (undoData.capturedPiece)
+          {
+            whatMovedCaptured[CAPTURINGCOLORINDEX] = colorText(color);
+            pieceText
+              (
+                color,
+                board.whatPiece(moveInfo.end)->whatType(),
+                whatMovedCaptured + CAPTURINGPIECEINDEX
+              );
+            pieceText
+              (
+                OtherColor(color),
+                undoData.capturedPiece->whatType(),
+                whatMovedCaptured + CAPTUREDPIECEINDEX
+              );
 
-	    delete undoData.capturedPiece;
+            delete undoData.capturedPiece;
 
-	    if (!ChessCharUI.showMessage(whatMovedCaptured,
-					 (char *) 0, (uint *) 0))
-	      return(FALSE);
-	  }
-	else
-	  {
-	    whatMoved[MOVECOLORINDEX] = colorText(color);
-	    pieceText
-	      (
-		color,
-		board.whatPiece(moveInfo.end)->whatType(),
-		whatMoved + MOVEPIECEINDEX
-	      );
-	    if (!ChessCharUI.showMessage(whatMoved,
-					 (char *) 0, (uint *) 0))
-	      return(FALSE);
-	  }
+            if (!ChessCharUI.showMessage(whatMovedCaptured,
+                                         (char *) 0, (uint *) 0))
+              return(FALSE);
+          }
+        else
+          {
+            whatMoved[MOVECOLORINDEX] = colorText(color);
+            pieceText
+              (
+                color,
+                board.whatPiece(moveInfo.end)->whatType(),
+                whatMoved + MOVEPIECEINDEX
+              );
+            if (!ChessCharUI.showMessage(whatMoved,
+                                         (char *) 0, (uint *) 0))
+              return(FALSE);
+          }
 
-	if (moveInfo.promoteType != TYPENOPIECE)
-	  {
-	    board.promote(moveInfo.end, moveInfo.promoteType);
-	    ChessCharUI.clearPiece(moveInfo.end);
-	    ChessCharUI.showPiece
-	      (
-		moveInfo.end,
-		pieceAbbrev(color, moveInfo.promoteType)
-	      );
-	    doPromotion[PROMOTECOLORINDEX] = colorText(color);
-	    pieceText
-	      (
-		color,
-		moveInfo.promoteType,
-		doPromotion + PROMOTEPIECEINDEX
-	      );
-	    if (!ChessCharUI.showMessage(doPromotion, (char *) 0,
-					 (uint *) 0))
-	      return(FALSE);
-	  }
-	ChessCharUI.clearSelect(moveInfo.start);
-	ChessCharUI.clearSelect(moveInfo.end);
+        if (moveInfo.promoteType != TYPENOPIECE)
+          {
+            board.promote(moveInfo.end, moveInfo.promoteType);
+            ChessCharUI.clearPiece(moveInfo.end);
+            ChessCharUI.showPiece
+              (
+                moveInfo.end,
+                pieceAbbrev(color, moveInfo.promoteType)
+              );
+            doPromotion[PROMOTECOLORINDEX] = colorText(color);
+            pieceText
+              (
+                color,
+                moveInfo.promoteType,
+                doPromotion + PROMOTEPIECEINDEX
+              );
+            if (!ChessCharUI.showMessage(doPromotion, (char *) 0,
+                                         (uint *) 0))
+              return(FALSE);
+          }
+        ChessCharUI.clearSelect(moveInfo.start);
+        ChessCharUI.clearSelect(moveInfo.end);
 
-	return(TRUE);
+        return(TRUE);
 
       } // end of switch
 

@@ -183,7 +183,7 @@ uint CHARUSERIFACE::readKey(void)
   {
     int c = tty_rd();
 
-    if ((c == 'q') || (c == 'Q'))
+    if ((c == 'x') || (c == 'X'))
       return(KEYEXIT);
 
     if (c == ESC)

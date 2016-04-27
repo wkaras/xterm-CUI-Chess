@@ -105,10 +105,10 @@ int main(int nArg, char **arg)
 
     for ( ; ; )
       {
-	if (whitePlayer->play(board) == GAMEOVER)
-	  break;
-	if (blackPlayer->play(board) == GAMEOVER)
-	  break;
+        if (whitePlayer->play(board) == GAMEOVER)
+          break;
+        if (blackPlayer->play(board) == GAMEOVER)
+          break;
       }
 
     delete whitePlayer;

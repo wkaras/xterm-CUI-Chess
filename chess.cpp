@@ -25,11 +25,11 @@ extern void OutOfMemory(void);
 
 // piece values.
 const int VALUEKING = 0,
-	  VALUEPAWN = 2,
-	  VALUEROOK = 10,
-	  VALUEKNIGHT = 6,
-	  VALUEBISHOP = 6,
-	  VALUEQUEEN = 18;
+          VALUEPAWN = 2,
+          VALUEROOK = 10,
+          VALUEKNIGHT = 6,
+          VALUEBISHOP = 6,
+          VALUEQUEEN = 18;
 
 class PAWN : public PIECE
   {
@@ -47,24 +47,24 @@ class PAWN : public PIECE
 
     virtual PIECETYPE whatType(void) const
       {
-	if (promotePiece)
-	  return(promotePiece->whatType());
-	else
-	  return(PIECE::whatType());
+        if (promotePiece)
+          return(promotePiece->whatType());
+        else
+          return(PIECE::whatType());
       }
 
     virtual int whatValue(void) const
       {
-	if (promotePiece)
-	  return(promotePiece->whatValue());
-	else
-	  return(PIECE::whatValue());
+        if (promotePiece)
+          return(promotePiece->whatValue());
+        else
+          return(PIECE::whatValue());
       }
 
     virtual void legalMoves
       (
-	POSITION start,
-	const BOARD &board,
+        POSITION start,
+        const BOARD &board,
         POSITIONLIST &moves
       ) const;
 
@@ -77,8 +77,8 @@ class ROOK : public PIECE
 
     virtual void legalMoves
       (
-	POSITION start,
-	const BOARD &board,
+        POSITION start,
+        const BOARD &board,
         POSITIONLIST &moves
       ) const;
 
@@ -91,8 +91,8 @@ class KNIGHT : public PIECE
 
     virtual void legalMoves
       (
-	POSITION start,
-	const BOARD &board,
+        POSITION start,
+        const BOARD &board,
         POSITIONLIST &moves
       ) const;
 
@@ -105,8 +105,8 @@ class BISHOP : public PIECE
 
     virtual void legalMoves
       (
-	POSITION start,
-	const BOARD &board,
+        POSITION start,
+        const BOARD &board,
         POSITIONLIST &moves
       ) const;
 
@@ -119,8 +119,8 @@ class QUEEN : public PIECE
 
     virtual void legalMoves
       (
-	POSITION start,
-	const BOARD &board,
+        POSITION start,
+        const BOARD &board,
         POSITIONLIST &moves
       ) const;
 
@@ -133,8 +133,8 @@ class KING : public PIECE
 
     virtual void legalMoves
       (
-	POSITION start,
-	const BOARD &board,
+        POSITION start,
+        const BOARD &board,
         POSITIONLIST &moves
       ) const;
 
@@ -185,7 +185,7 @@ BOARD::BOARD(void)
 
     for (row = 0; row < NUMROWS; row++)
       for (col = 0; col < NUMCOLS; col++)
-	brd[row][col] = (PIECE *) 0;
+        brd[row][col] = (PIECE *) 0;
 
     setupPieces(brd, WHITE, 0, 1);
     setupPieces(brd, BLACK, 7, 6);
@@ -201,10 +201,10 @@ BOARD::~BOARD(void)
 
     for (r = 0; r < NUMROWS; r++)
       for (c = 0; c < NUMROWS; c++)
-	{
-	  if (brd[r][c])
-	    delete brd[r][c];
-	}
+        {
+          if (brd[r][c])
+            delete brd[r][c];
+        }
 
     return;
   }
@@ -226,48 +226,48 @@ void BOARD::doMove
 
     if (brd[end.row][end.col]->whatType() == TYPEPAWN)
       {
-	if (wasLastMoveDoublePawn)
-	  if ((doubleMovedPawn.row == end.row) &&
-	      (doubleMovedPawn.col == start.col) &&
-	      (start.row != end.row) &&
-	      !undoData.capturedPiece)
-	      // these last two tests are necessary to handle situations
-	      // where the same color is moved twice in a row when
-	      // looking for check in "canCastle" and looking for
-	      // stalemate
-	    {
-	      // en passant capture
-	      undoData.capturedPiece =
-		brd[doubleMovedPawn.row][doubleMovedPawn.col];
-	      brd[doubleMovedPawn.row][doubleMovedPawn.col] =
-		(PIECE *) 0;
-	      undoData.saveDoubleMoved = doubleMovedPawn;
-	      undoData.enPassantEffect = ENPASSANTCAPTURE;
-	      wasLastMoveDoublePawn = FALSE;
-	      return;
-	    }
-	{
-	  int diff = start.col - end.col;
-	  if (diff < 0)
-	    diff = -diff;
-	  if (diff == 2)
-	    {
-	      if (wasLastMoveDoublePawn)
-		{
-		  undoData.saveDoubleMoved = doubleMovedPawn;
-		  undoData.enPassantEffect = AFTERDOUBLEMOVE;
-		}
-	      doubleMovedPawn = end;
-	      wasLastMoveDoublePawn = TRUE;
-	      return;
-	    }
-	}
+        if (wasLastMoveDoublePawn)
+          if ((doubleMovedPawn.row == end.row) &&
+              (doubleMovedPawn.col == start.col) &&
+              (start.row != end.row) &&
+              !undoData.capturedPiece)
+              // these last two tests are necessary to handle situations
+              // where the same color is moved twice in a row when
+              // looking for check in "canCastle" and looking for
+              // stalemate
+            {
+              // en passant capture
+              undoData.capturedPiece =
+                brd[doubleMovedPawn.row][doubleMovedPawn.col];
+              brd[doubleMovedPawn.row][doubleMovedPawn.col] =
+                (PIECE *) 0;
+              undoData.saveDoubleMoved = doubleMovedPawn;
+              undoData.enPassantEffect = ENPASSANTCAPTURE;
+              wasLastMoveDoublePawn = FALSE;
+              return;
+            }
+        {
+          int diff = start.col - end.col;
+          if (diff < 0)
+            diff = -diff;
+          if (diff == 2)
+            {
+              if (wasLastMoveDoublePawn)
+                {
+                  undoData.saveDoubleMoved = doubleMovedPawn;
+                  undoData.enPassantEffect = AFTERDOUBLEMOVE;
+                }
+              doubleMovedPawn = end;
+              wasLastMoveDoublePawn = TRUE;
+              return;
+            }
+        }
       }
 
     if (wasLastMoveDoublePawn)
       {
-	undoData.saveDoubleMoved = doubleMovedPawn;
-	undoData.enPassantEffect = AFTERDOUBLEMOVE;
+        undoData.saveDoubleMoved = doubleMovedPawn;
+        undoData.enPassantEffect = AFTERDOUBLEMOVE;
       }
     wasLastMoveDoublePawn = FALSE;
 
@@ -287,8 +287,8 @@ void BOARD::undoMove
 
     if (undoData.enPassantEffect == ENPASSANTCAPTURE)
       {
-	brd[end.row][orig.col] = undoData.capturedPiece;
-	brd[end.row][end.col] = (PIECE *) 0;
+        brd[end.row][orig.col] = undoData.capturedPiece;
+        brd[end.row][end.col] = (PIECE *) 0;
       }
     else
       brd[end.row][end.col] = undoData.capturedPiece;
@@ -297,8 +297,8 @@ void BOARD::undoMove
       wasLastMoveDoublePawn = FALSE;
     else
       {
-	wasLastMoveDoublePawn = TRUE;
-	doubleMovedPawn = undoData.saveDoubleMoved;
+        wasLastMoveDoublePawn = TRUE;
+        doubleMovedPawn = undoData.saveDoubleMoved;
       }
 
     return;
@@ -312,13 +312,13 @@ BOOL BOARD::canCastle(MOVETYPE whichCastle, PIECECOLOR color)
 
     if (whichCastle == QUEENSIDECASTLE)
       {
-	row = 0;
-	rowStep = 1;
+        row = 0;
+        rowStep = 1;
       }
     else
       {
-	row = 7;
-	rowStep = -1;
+        row = 7;
+        rowStep = -1;
       }
 
     // make sure king & rook in initial positions and have never been
@@ -335,11 +335,11 @@ BOOL BOARD::canCastle(MOVETYPE whichCastle, PIECECOLOR color)
     // make sure no pieces in between
     for ( ; ; )
       {
-	row += rowStep;
-	if (row == 4)
-	  break;
-	if (brd[row][col])
-	  return(FALSE);
+        row += rowStep;
+        if (row == 4)
+          break;
+        if (brd[row][col])
+          return(FALSE);
       }
 
     // make sure king is not in check
@@ -368,28 +368,28 @@ void BOARD::castle
 
     if (whichCastle == QUEENSIDECASTLE)
       {
-	brd[3][col] = brd[0][col];
-	brd[2][col] = brd[4][col];
-	brd[0][col] = (PIECE *) 0;
-	brd[4][col] = (PIECE *) 0;
-	brd[3][col]->moveDone();
-	brd[2][col]->moveDone();
+        brd[3][col] = brd[0][col];
+        brd[2][col] = brd[4][col];
+        brd[0][col] = (PIECE *) 0;
+        brd[4][col] = (PIECE *) 0;
+        brd[3][col]->moveDone();
+        brd[2][col]->moveDone();
       }
     else
       {
-	brd[5][col] = brd[7][col];
-	brd[6][col] = brd[4][col];
-	brd[7][col] = (PIECE *) 0;
-	brd[4][col] = (PIECE *) 0;
-	brd[5][col]->moveDone();
-	brd[6][col]->moveDone();
+        brd[5][col] = brd[7][col];
+        brd[6][col] = brd[4][col];
+        brd[7][col] = (PIECE *) 0;
+        brd[4][col] = (PIECE *) 0;
+        brd[5][col]->moveDone();
+        brd[6][col]->moveDone();
       }
 
     if (wasLastMoveDoublePawn)
       {
-	undoData.enPassantEffect = AFTERDOUBLEMOVE;
-	undoData.saveDoubleMoved = doubleMovedPawn;
-	wasLastMoveDoublePawn = FALSE;
+        undoData.enPassantEffect = AFTERDOUBLEMOVE;
+        undoData.saveDoubleMoved = doubleMovedPawn;
+        wasLastMoveDoublePawn = FALSE;
       }
     else
       undoData.enPassantEffect = OTHERMOVE;
@@ -409,26 +409,26 @@ void BOARD::undoCastle
 
     if (whichCastle == QUEENSIDECASTLE)
       {
-	brd[0][col] = brd[3][col];
-	brd[4][col] = brd[2][col];
-	brd[3][col] = (PIECE *) 0;
-	brd[2][col] = (PIECE *) 0;
-	brd[0][col]->moveUndone();
-	brd[4][col]->moveUndone();
+        brd[0][col] = brd[3][col];
+        brd[4][col] = brd[2][col];
+        brd[3][col] = (PIECE *) 0;
+        brd[2][col] = (PIECE *) 0;
+        brd[0][col]->moveUndone();
+        brd[4][col]->moveUndone();
       }
     else
       {
-	brd[7][col] = brd[5][col];
-	brd[4][col] = brd[6][col];
-	brd[5][col] = (PIECE *) 0;
-	brd[6][col] = (PIECE *) 0;
-	brd[7][col]->moveUndone();
-	brd[4][col]->moveUndone();
+        brd[7][col] = brd[5][col];
+        brd[4][col] = brd[6][col];
+        brd[5][col] = (PIECE *) 0;
+        brd[6][col] = (PIECE *) 0;
+        brd[7][col]->moveUndone();
+        brd[4][col]->moveUndone();
       }
 
     if (undoData.enPassantEffect == AFTERDOUBLEMOVE)
       {
-	wasLastMoveDoublePawn = TRUE;
+        wasLastMoveDoublePawn = TRUE;
         doubleMovedPawn = undoData.saveDoubleMoved;
       }
     else
@@ -481,9 +481,9 @@ MOVESTATUS BOARD::doUserMove
     p->legalMoves(start, *this, moves);
     for (m = 0; m < moves.nMoves; m++)
       {
-	if ((moves.end[m].row == end.row) &&
-	    (moves.end[m].col == end.col))
-	  break;
+        if ((moves.end[m].row == end.row) &&
+            (moves.end[m].col == end.col))
+          break;
       }
     if (m == moves.nMoves)
       return(MOVESTATUS(ILLEGALMOVE));
@@ -495,7 +495,7 @@ MOVESTATUS BOARD::doUserMove
     if (metric.kingSituation[p->whatColor()] == KINGLOST)
       {
         undoMove(end, start, undoData);
-	return(MOVESTATUS(WOULDLOSEKING, bestMoves.move[0].start));
+        return(MOVESTATUS(WOULDLOSEKING, bestMoves.move[0].start));
       }
 
     if (undoData.capturedPiece)
@@ -546,15 +546,15 @@ class THISSITUATIONCOMPARETABLE : public SITUATIONCOMPARETABLE
   public:
     THISSITUATIONCOMPARETABLE(void)
       {
-	(*this)[KINGLOST][KINGLOST] = 0;
-	(*this)[KINGLOST][STALEMATE] = -1;
-	(*this)[KINGLOST][KINGOK] = -1;
-	(*this)[STALEMATE][KINGLOST] = 1;
-	(*this)[STALEMATE][STALEMATE] = 0;
-	(*this)[STALEMATE][KINGOK] = -1;
-	(*this)[KINGOK][KINGLOST] = 1;
-	(*this)[KINGOK][STALEMATE] = 1;
-	(*this)[KINGOK][KINGOK] = 0;
+        (*this)[KINGLOST][KINGLOST] = 0;
+        (*this)[KINGLOST][STALEMATE] = -1;
+        (*this)[KINGLOST][KINGOK] = -1;
+        (*this)[STALEMATE][KINGLOST] = 1;
+        (*this)[STALEMATE][STALEMATE] = 0;
+        (*this)[STALEMATE][KINGOK] = -1;
+        (*this)[KINGOK][KINGLOST] = 1;
+        (*this)[KINGOK][STALEMATE] = 1;
+        (*this)[KINGOK][KINGOK] = 0;
       }
   };
 
@@ -565,15 +565,15 @@ class OTHERSITUATIONCOMPARETABLE : public SITUATIONCOMPARETABLE
   public:
     OTHERSITUATIONCOMPARETABLE(void)
       {
-	(*this)[KINGLOST][KINGLOST] = 0;
-	(*this)[KINGLOST][STALEMATE] = 1;
-	(*this)[KINGLOST][KINGOK] = 1;
-	(*this)[STALEMATE][KINGLOST] = -1;
-	(*this)[STALEMATE][STALEMATE] = 0;
-	(*this)[STALEMATE][KINGOK] = -1;
-	(*this)[KINGOK][KINGLOST] = -1;
-	(*this)[KINGOK][STALEMATE] = 1;
-	(*this)[KINGOK][KINGOK] = 0;
+        (*this)[KINGLOST][KINGLOST] = 0;
+        (*this)[KINGLOST][STALEMATE] = 1;
+        (*this)[KINGLOST][KINGOK] = 1;
+        (*this)[STALEMATE][KINGLOST] = -1;
+        (*this)[STALEMATE][STALEMATE] = 0;
+        (*this)[STALEMATE][KINGOK] = -1;
+        (*this)[KINGOK][KINGLOST] = -1;
+        (*this)[KINGOK][STALEMATE] = 1;
+        (*this)[KINGOK][KINGOK] = 0;
       }
   };
 
@@ -597,12 +597,12 @@ LOCAL int compareMetric
       return(1);
 
     compare = thisSituationCompareTable[a.kingSituation[color]]
-				       [b.kingSituation[color]];
+                                       [b.kingSituation[color]];
     if (compare != 0)
       return(compare);
 
     compare = otherSituationCompareTable[a.kingSituation[otherColor]]
-				        [b.kingSituation[otherColor]];
+                                        [b.kingSituation[otherColor]];
     if (compare != 0)
       return(compare);
 
@@ -638,247 +638,247 @@ void BOARD::helpFindBestMoves
 
     for (where.row = 0; where.row < NUMROWS; where.row++)
       for (where.col = 0; where.col < NUMCOLS; where.col++)
-	{
-	  if (whatPiece(where))
-	    if (whatPiece(where)->whatColor() == moveColor)
-	      {
-		whatPiece(where)->legalMoves(where, *this, moves);
-		for (m = 0; m < moves.nMoves; m++)
-		  {
-		    testMetric.materialDiff = origMaterialDiff;
-		    doMove
-		      (
-			where,
-			moves.end[m],
-			undoData
-		      );
+        {
+          if (whatPiece(where))
+            if (whatPiece(where)->whatColor() == moveColor)
+              {
+                whatPiece(where)->legalMoves(where, *this, moves);
+                for (m = 0; m < moves.nMoves; m++)
+                  {
+                    testMetric.materialDiff = origMaterialDiff;
+                    doMove
+                      (
+                        where,
+                        moves.end[m],
+                        undoData
+                      );
 
-		    if (undoData.capturedPiece)
-		      {
-			if (undoData.capturedPiece->whatType() == TYPEKING)
-			  {
-			    undoMove
-			      (
-				moves.end[m],
-				where,
-				undoData
-			      );
+                    if (undoData.capturedPiece)
+                      {
+                        if (undoData.capturedPiece->whatType() == TYPEKING)
+                          {
+                            undoMove
+                              (
+                                moves.end[m],
+                                where,
+                                undoData
+                              );
 
-			    metric.kingSituation[OtherColor(moveColor)] =
-			      KINGLOST;
+                            metric.kingSituation[OtherColor(moveColor)] =
+                              KINGLOST;
 
-			    if (bestMoves)
-			      {
-				bestMoves->nMoves = 0;
-				bestMoves->move[0] =
-				  PIECEMOVE
-				    (
-				      NORMALMOVE,
-				      where,
-				      moves.end[m]
-				    );
-			      }
+                            if (bestMoves)
+                              {
+                                bestMoves->nMoves = 0;
+                                bestMoves->move[0] =
+                                  PIECEMOVE
+                                    (
+                                      NORMALMOVE,
+                                      where,
+                                      moves.end[m]
+                                    );
+                              }
 
-			    return;
-			  }
-			testMetric.materialDiff -=
-			  undoData.capturedPiece->signedValue();
-		      }
+                            return;
+                          }
+                        testMetric.materialDiff -=
+                          undoData.capturedPiece->signedValue();
+                      }
 
-		    if (canPromote(moves.end[m]))
-		      {
-			testMetric.materialDiff -=
-			  whatPiece(moves.end[m])->signedValue();
-			promote(moves.end[m], TYPEQUEEN);
-			testMetric.materialDiff +=
-			  whatPiece(moves.end[m])->signedValue();
-			if (lookAhead > 1)
-			  helpFindBestMoves
-			    (
-			      lookAhead - 1,
-			      OtherColor(moveColor),
-			      testMetric,
-			      (BESTMOVES *) 0
-			    );
-			compareResult = compareMetric
-					  (
-					    testMetric,
-					    metric,
-				            metricSet,
-					    moveColor
-					  );
-		        if (compareResult >= 0)
-			  {
-			    if (compareResult > 0)
-			      {
-				metric = testMetric;
-				metricSet = TRUE;
-				if (bestMoves)
-				  bestMoves->nMoves = 0;
-			      }
-			    if (bestMoves)
-			      bestMoves->move[bestMoves->nMoves++] =
-				PIECEMOVE
-				  (
-				    NORMALMOVE,
-				    where,
-				    moves.end[m],
-				    TYPEQUEEN
-				  );
-			  }
-			testMetric.materialDiff -=
-			  whatPiece(moves.end[m])->signedValue();
-			restorePawn(moves.end[m]);
+                    if (canPromote(moves.end[m]))
+                      {
+                        testMetric.materialDiff -=
+                          whatPiece(moves.end[m])->signedValue();
+                        promote(moves.end[m], TYPEQUEEN);
+                        testMetric.materialDiff +=
+                          whatPiece(moves.end[m])->signedValue();
+                        if (lookAhead > 1)
+                          helpFindBestMoves
+                            (
+                              lookAhead - 1,
+                              OtherColor(moveColor),
+                              testMetric,
+                              (BESTMOVES *) 0
+                            );
+                        compareResult = compareMetric
+                                          (
+                                            testMetric,
+                                            metric,
+                                            metricSet,
+                                            moveColor
+                                          );
+                        if (compareResult >= 0)
+                          {
+                            if (compareResult > 0)
+                              {
+                                metric = testMetric;
+                                metricSet = TRUE;
+                                if (bestMoves)
+                                  bestMoves->nMoves = 0;
+                              }
+                            if (bestMoves)
+                              bestMoves->move[bestMoves->nMoves++] =
+                                PIECEMOVE
+                                  (
+                                    NORMALMOVE,
+                                    where,
+                                    moves.end[m],
+                                    TYPEQUEEN
+                                  );
+                          }
+                        testMetric.materialDiff -=
+                          whatPiece(moves.end[m])->signedValue();
+                        restorePawn(moves.end[m]);
 
-			promote(moves.end[m], TYPEKNIGHT);
-			testMetric.materialDiff +=
-			  whatPiece(moves.end[m])->signedValue();
-			if (lookAhead > 1)
-			  helpFindBestMoves
-			    (
-			      lookAhead - 1,
-			      OtherColor(moveColor),
-			      testMetric,
-			      (BESTMOVES *) 0
-			    );
-			compareResult = compareMetric
-					  (
-					    testMetric,
-					    metric,
-				            metricSet,
-					    moveColor
-					  );
-		        if (compareResult >= 0)
-			  {
-			    if (compareResult > 0)
-			      {
-				metric = testMetric;
-				metricSet = TRUE;
-				if (bestMoves)
-				  bestMoves->nMoves = 0;
-			      }
-			    if (bestMoves)
-			      bestMoves->move[bestMoves->nMoves++] =
-				PIECEMOVE
-				  (
-				    NORMALMOVE,
-				    where,
-				    moves.end[m],
-				    TYPEKNIGHT
-				  );
-			  }
-			restorePawn(moves.end[m]);
-		      }
-		    else // no promotion
-		      {
-			if (lookAhead > 1)
-			  helpFindBestMoves
-			    (
-			      lookAhead - 1,
-			      OtherColor(moveColor),
-			      testMetric,
-			      (BESTMOVES *) 0
-			    );
-			compareResult = compareMetric
-					  (
-					    testMetric,
-					    metric,
-				            metricSet,
-					    moveColor
-					   );
-		        if (compareResult >= 0)
-			  {
-			    if (compareResult > 0)
-			      {
-				metric = testMetric;
-				metricSet = TRUE;
-				if (bestMoves)
-				  bestMoves->nMoves = 0;
-			      }
-			    if (bestMoves)
-			      bestMoves->move[bestMoves->nMoves++] =
-				PIECEMOVE
-				  (
-				    NORMALMOVE,
-				    where,
-				    moves.end[m]
-				  );
-			  }
-		      }
+                        promote(moves.end[m], TYPEKNIGHT);
+                        testMetric.materialDiff +=
+                          whatPiece(moves.end[m])->signedValue();
+                        if (lookAhead > 1)
+                          helpFindBestMoves
+                            (
+                              lookAhead - 1,
+                              OtherColor(moveColor),
+                              testMetric,
+                              (BESTMOVES *) 0
+                            );
+                        compareResult = compareMetric
+                                          (
+                                            testMetric,
+                                            metric,
+                                            metricSet,
+                                            moveColor
+                                          );
+                        if (compareResult >= 0)
+                          {
+                            if (compareResult > 0)
+                              {
+                                metric = testMetric;
+                                metricSet = TRUE;
+                                if (bestMoves)
+                                  bestMoves->nMoves = 0;
+                              }
+                            if (bestMoves)
+                              bestMoves->move[bestMoves->nMoves++] =
+                                PIECEMOVE
+                                  (
+                                    NORMALMOVE,
+                                    where,
+                                    moves.end[m],
+                                    TYPEKNIGHT
+                                  );
+                          }
+                        restorePawn(moves.end[m]);
+                      }
+                    else // no promotion
+                      {
+                        if (lookAhead > 1)
+                          helpFindBestMoves
+                            (
+                              lookAhead - 1,
+                              OtherColor(moveColor),
+                              testMetric,
+                              (BESTMOVES *) 0
+                            );
+                        compareResult = compareMetric
+                                          (
+                                            testMetric,
+                                            metric,
+                                            metricSet,
+                                            moveColor
+                                           );
+                        if (compareResult >= 0)
+                          {
+                            if (compareResult > 0)
+                              {
+                                metric = testMetric;
+                                metricSet = TRUE;
+                                if (bestMoves)
+                                  bestMoves->nMoves = 0;
+                              }
+                            if (bestMoves)
+                              bestMoves->move[bestMoves->nMoves++] =
+                                PIECEMOVE
+                                  (
+                                    NORMALMOVE,
+                                    where,
+                                    moves.end[m]
+                                  );
+                          }
+                      }
 
-		    undoMove
-		      (
-			moves.end[m],
-			where,
-			undoData
-		      );
+                    undoMove
+                      (
+                        moves.end[m],
+                        where,
+                        undoData
+                      );
 
-		  } // end of for loop over each legal move for piece
+                  } // end of for loop over each legal move for piece
 
-	      }
+              }
 
-	} // end of double for loop over each board position
+        } // end of double for loop over each board position
 
     // only try castling moves if look ahead move than one, since
     // nothing can be captured by doing a castling move
     if (lookAhead > 1)
       {
-	castleType = QUEENSIDECASTLE;
-	for ( ; ; )
-	  {
-	    if (canCastle(castleType, moveColor))
-	      {
-		testMetric.materialDiff = origMaterialDiff;
-		castle(castleType, moveColor, undoData);
-		helpFindBestMoves
-		  (
-		    lookAhead - 1,
-		    OtherColor(moveColor),
-		    testMetric,
-		    (BESTMOVES *) 0
-		  );
-		compareResult = compareMetric
-				  (
-				    testMetric,
-				    metric,
-				    metricSet,
-				    moveColor
-				  );
-		if (compareResult >= 0)
-		  {
-		    if (compareResult > 0)
-		      {
-			metric = testMetric;
-			metricSet = TRUE;
-			if (bestMoves)
-			  bestMoves->nMoves = 0;
-		      }
-		    if (bestMoves)
-		      bestMoves->move[bestMoves->nMoves++] =
-			PIECEMOVE(castleType);
-		  }
-		undoCastle(castleType, moveColor, undoData);
-	      }
-	    if (castleType == KINGSIDECASTLE)
-	      break;
-	    castleType = KINGSIDECASTLE;
-	  }
+        castleType = QUEENSIDECASTLE;
+        for ( ; ; )
+          {
+            if (canCastle(castleType, moveColor))
+              {
+                testMetric.materialDiff = origMaterialDiff;
+                castle(castleType, moveColor, undoData);
+                helpFindBestMoves
+                  (
+                    lookAhead - 1,
+                    OtherColor(moveColor),
+                    testMetric,
+                    (BESTMOVES *) 0
+                  );
+                compareResult = compareMetric
+                                  (
+                                    testMetric,
+                                    metric,
+                                    metricSet,
+                                    moveColor
+                                  );
+                if (compareResult >= 0)
+                  {
+                    if (compareResult > 0)
+                      {
+                        metric = testMetric;
+                        metricSet = TRUE;
+                        if (bestMoves)
+                          bestMoves->nMoves = 0;
+                      }
+                    if (bestMoves)
+                      bestMoves->move[bestMoves->nMoves++] =
+                        PIECEMOVE(castleType);
+                  }
+                undoCastle(castleType, moveColor, undoData);
+              }
+            if (castleType == KINGSIDECASTLE)
+              break;
+            castleType = KINGSIDECASTLE;
+          }
 
         // see if the loss of the king is the result of a stalemate
-	// instead of check mate
+        // instead of check mate
         if (metric.kingSituation[moveColor] == KINGLOST)
-	  {
-	    helpFindBestMoves
-	      (
-		1,
-		OtherColor(moveColor),
-		testMetric,
-		(BESTMOVES *) 0
-	      );
-	    if (testMetric.kingSituation[moveColor] != KINGLOST)
-	      // king will be lost on next move, but is not in check
-	      metric.kingSituation[moveColor] = STALEMATE;
-	  }
+          {
+            helpFindBestMoves
+              (
+                1,
+                OtherColor(moveColor),
+                testMetric,
+                (BESTMOVES *) 0
+              );
+            if (testMetric.kingSituation[moveColor] != KINGLOST)
+              // king will be lost on next move, but is not in check
+              metric.kingSituation[moveColor] = STALEMATE;
+          }
       }
 
     return;
@@ -900,16 +900,16 @@ LOCAL void horzMoves
 
     for ( ; ; )
       {
-	col += delta;
-	if (col == limit)
-	  return;
-	if (board.whatPiece(row, col))
-	  if (board.whatPiece(row, col)->whatColor() == color)
-	    return;
-	moves.end[moves.nMoves].row = row;
-	moves.end[moves.nMoves++].col = col;
-	if (board.whatPiece(row, col))
-	  return;
+        col += delta;
+        if (col == limit)
+          return;
+        if (board.whatPiece(row, col))
+          if (board.whatPiece(row, col)->whatColor() == color)
+            return;
+        moves.end[moves.nMoves].row = row;
+        moves.end[moves.nMoves++].col = col;
+        if (board.whatPiece(row, col))
+          return;
       }
   }
 
@@ -929,16 +929,16 @@ LOCAL void vertMoves
 
     for ( ; ; )
       {
-	row += delta;
-	if (row == limit)
-	  return;
-	if (board.whatPiece(row, col))
-	  if (board.whatPiece(row, col)->whatColor() == color)
-	    return;
-	moves.end[moves.nMoves].row = row;
-	moves.end[moves.nMoves++].col = col;
-	if (board.whatPiece(row, col))
-	  return;
+        row += delta;
+        if (row == limit)
+          return;
+        if (board.whatPiece(row, col))
+          if (board.whatPiece(row, col)->whatColor() == color)
+            return;
+        moves.end[moves.nMoves].row = row;
+        moves.end[moves.nMoves++].col = col;
+        if (board.whatPiece(row, col))
+          return;
       }
   }
 
@@ -977,17 +977,17 @@ LOCAL void diagMoves
 
     for ( ; ; )
       {
-	row += rowDelta;
-	col += colDelta;
-	if ((row == rowLimit) || (col == colLimit))
-	  return;
-	if (board.whatPiece(row, col))
-	  if (board.whatPiece(row, col)->whatColor() == color)
-	    return;
-	moves.end[moves.nMoves].row = row;
-	moves.end[moves.nMoves++].col = col;
-	if (board.whatPiece(row, col))
-	  return;
+        row += rowDelta;
+        col += colDelta;
+        if ((row == rowLimit) || (col == colLimit))
+          return;
+        if (board.whatPiece(row, col))
+          if (board.whatPiece(row, col)->whatColor() == color)
+            return;
+        moves.end[moves.nMoves].row = row;
+        moves.end[moves.nMoves++].col = col;
+        if (board.whatPiece(row, col))
+          return;
       }
   }
 
@@ -1044,22 +1044,22 @@ LOCAL void movesFromOffsets
 
     for (i = 0; i < nOffsets; i++)
       {
-	moves.end[moves.nMoves].row = row + offset[i].row;
-	moves.end[moves.nMoves].col = col + offset[i].col;
-	if (withinBoard(moves.end[moves.nMoves].row,
-		        moves.end[moves.nMoves].col))
-	  {
-	    p = board.whatPiece
-		  (
-		    moves.end[moves.nMoves].row = row + offset[i].row,
-		    moves.end[moves.nMoves].col = col + offset[i].col
-		  );
+        moves.end[moves.nMoves].row = row + offset[i].row;
+        moves.end[moves.nMoves].col = col + offset[i].col;
+        if (withinBoard(moves.end[moves.nMoves].row,
+                        moves.end[moves.nMoves].col))
+          {
+            p = board.whatPiece
+                  (
+                    moves.end[moves.nMoves].row = row + offset[i].row,
+                    moves.end[moves.nMoves].col = col + offset[i].col
+                  );
 
-	    if (!p)
-	      moves.nMoves++;
-	    else if (p->whatColor() != color)
-	      moves.nMoves++;
-	  }
+            if (!p)
+              moves.nMoves++;
+            else if (p->whatColor() != color)
+              moves.nMoves++;
+          }
       }
 
     return;
@@ -1080,20 +1080,20 @@ void PAWN::promote(PIECETYPE promoteType)
     switch (promoteType)
       {
       case TYPEQUEEN:
-	promotePiece = new QUEEN(whatColor());
-	break;
+        promotePiece = new QUEEN(whatColor());
+        break;
 
       case TYPEROOK:
-	promotePiece = new ROOK(whatColor());
-	break;
+        promotePiece = new ROOK(whatColor());
+        break;
 
       case TYPEBISHOP:
-	promotePiece = new BISHOP(whatColor());
-	break;
+        promotePiece = new BISHOP(whatColor());
+        break;
 
       case TYPEKNIGHT:
-	promotePiece = new KNIGHT(whatColor());
-	break;
+        promotePiece = new KNIGHT(whatColor());
+        break;
       }
 
     if (!promotePiece)
@@ -1122,19 +1122,19 @@ void PAWN::legalMoves
 
     if (promotePiece)
       {
-	promotePiece->legalMoves(start, board, moves);
-	return;
+        promotePiece->legalMoves(start, board, moves);
+        return;
       }
     
     if (whatColor() == WHITE)
       {
-	delta = 1;
-	limit = NUMCOLS;
+        delta = 1;
+        limit = NUMCOLS;
       }
     else
       {
-	delta = -1;
-	limit = -1;
+        delta = -1;
+        limit = -1;
       }
 
     moves.nMoves = 0;
@@ -1142,19 +1142,19 @@ void PAWN::legalMoves
     // check if en passant capture possible
     if (board.lastMoveDoublePawn(doubleMovedPawn))
       if ((start.col == doubleMovedPawn.col) &&
-	  (whatColor() != board.whatPiece(doubleMovedPawn)->whatColor()))
-	{
-	  if ((start.row - 1) == doubleMovedPawn.row)
-	    {
-	      moves.end[moves.nMoves].row = start.row - 1;
-	      moves.end[moves.nMoves++].col = start.col + delta;
-	    }
-	  else if ((start.row + 1) == doubleMovedPawn.row)
-	    {
-	      moves.end[moves.nMoves].row = start.row + 1;
-	      moves.end[moves.nMoves++].col = start.col + delta;
-	    }
-	}
+          (whatColor() != board.whatPiece(doubleMovedPawn)->whatColor()))
+        {
+          if ((start.row - 1) == doubleMovedPawn.row)
+            {
+              moves.end[moves.nMoves].row = start.row - 1;
+              moves.end[moves.nMoves++].col = start.col + delta;
+            }
+          else if ((start.row + 1) == doubleMovedPawn.row)
+            {
+              moves.end[moves.nMoves].row = start.row + 1;
+              moves.end[moves.nMoves++].col = start.col + delta;
+            }
+        }
 
     start.col += delta;
 
@@ -1164,35 +1164,35 @@ void PAWN::legalMoves
     // check for moves ahead
     if (!board.whatPiece(start))
       {
-	moves.end[moves.nMoves++] = start;
-	// check if initial double move possible
-	if (!hasBeenMoved())
-	  if (!board.whatPiece(start.row, start.col + delta))
-	    {
-	      moves.end[moves.nMoves].row = start.row;
-	      moves.end[moves.nMoves++].col = start.col + delta;
-	    }
+        moves.end[moves.nMoves++] = start;
+        // check if initial double move possible
+        if (!hasBeenMoved())
+          if (!board.whatPiece(start.row, start.col + delta))
+            {
+              moves.end[moves.nMoves].row = start.row;
+              moves.end[moves.nMoves++].col = start.col + delta;
+            }
       }
 
     // check for captures
 
     if (start.row > 0)
       if (board.whatPiece(start.row - 1, start.col))
-	if (board.whatPiece(start.row - 1, start.col)->whatColor() !=
-	    whatColor())
-	  {
-	    moves.end[moves.nMoves].row = start.row - 1;
-	    moves.end[moves.nMoves++].col = start.col;
-	  }
+        if (board.whatPiece(start.row - 1, start.col)->whatColor() !=
+            whatColor())
+          {
+            moves.end[moves.nMoves].row = start.row - 1;
+            moves.end[moves.nMoves++].col = start.col;
+          }
 
     if (start.row < (NUMROWS - 1))
       if (board.whatPiece(start.row + 1, start.col))
-	if (board.whatPiece(start.row + 1, start.col)->whatColor() !=
-	    whatColor())
-	  {
-	    moves.end[moves.nMoves].row = start.row + 1;
-	    moves.end[moves.nMoves++].col = start.col;
-	  }
+        if (board.whatPiece(start.row + 1, start.col)->whatColor() !=
+            whatColor())
+          {
+            moves.end[moves.nMoves].row = start.row + 1;
+            moves.end[moves.nMoves++].col = start.col;
+          }
 
     return;
   }

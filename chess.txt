@@ -1,5 +1,5 @@
                   CUI CHESS PROGRAM FOR UNIX XTERM
-			    Version 2.0
+                            Version 2.0
 
 Copyright (c) 2016 Walter William Karas
 
@@ -40,7 +40,7 @@ It is legal for both players to be user-controlled, or for both
 players to be computer-controlled.  When playing at skill level 4, the
 computer will take several minutes to select each move.  When playing
 at skill level 5 or 6, your grandchildren may have to finish the game
-for you.  You can exit the game by hitting q or Q when it is waiting for
+for you.  You can exit the game by hitting x or X when it is waiting for
 keyboard input.
 
 Pieces on the chess board are represented by two letter strings.  The

@@ -48,9 +48,9 @@ class CHESSUSERIFACE
     // also invokes the doMove member of board for the move.
     CLASSMEMBER BOOL computerMove
       (
-	BOARD &board,
-	PIECECOLOR color,
-	PIECEMOVE &moveInfo
+        BOARD &board,
+        PIECECOLOR color,
+        PIECEMOVE &moveInfo
       );
   };
 

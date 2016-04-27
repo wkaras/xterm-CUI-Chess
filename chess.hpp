@@ -79,16 +79,16 @@ class PIECEMOVE
 
     PIECEMOVE
       (
-	MOVETYPE t,
-	POSITION s,
-	POSITION e,
-	PIECETYPE pT = TYPENOPIECE
+        MOVETYPE t,
+        POSITION s,
+        POSITION e,
+        PIECETYPE pT = TYPENOPIECE
       ) : type(t), start(s), end(e), promoteType(pT) { }
 
     // constructor for castling moves
     PIECEMOVE
       (
-	MOVETYPE t
+        MOVETYPE t
       ) : type(t) { }
   };
 
@@ -159,11 +159,11 @@ class BOARD
       (
         // number of moves to look-ahead
         int lookAhead,
-	// color of player that is going to move
+        // color of player that is going to move
         PIECECOLOR moveColor,
-	// metric of optimal moves
+        // metric of optimal moves
         BOARDMETRIC &metric,
-	// if not null, filled in with list of optimal moves
+        // if not null, filled in with list of optimal moves
         BESTMOVES *bestMoves
       );
 
@@ -180,23 +180,23 @@ class BOARD
     // perform a move.  move is not validated (assumed to be legal).
     void doMove
       (
-	// starting and ending position of piece to move
-	POSITION start,
-	POSITION end,
-	// data needed to undo move.  caller must delete captured
-	// piece (unless move is undone)
-	MOVEUNDODATA &undoData
+        // starting and ending position of piece to move
+        POSITION start,
+        POSITION end,
+        // data needed to undo move.  caller must delete captured
+        // piece (unless move is undone)
+        MOVEUNDODATA &undoData
       );
 
     // undo a move done with doMove
     void undoMove
       (
         // ending and original position of piece (transposed of order
-	// as passed to doMove)
-	POSITION end,
-	POSITION orig,
-	// undo data returned by call to doMove
-	MOVEUNDODATA undoData
+        // as passed to doMove)
+        POSITION end,
+        POSITION orig,
+        // undo data returned by call to doMove
+        MOVEUNDODATA undoData
       );
 
     // returns TRUE if the king of the given color can castle on the
@@ -208,10 +208,10 @@ class BOARD
     // do a castle on the given side with the king of given color.
     // no validation, assumed to be legal.
     void castle(MOVETYPE whichCastle, PIECECOLOR color,
-	        MOVEUNDODATA &undoData);
+                MOVEUNDODATA &undoData);
     // undo a castle.  undoData must be as returned by castle member.
     void undoCastle(MOVETYPE whichCastle, PIECECOLOR color,
-		    MOVEUNDODATA &undoData);
+                    MOVEUNDODATA &undoData);
 
     // checks if the piece in the given position can be promoted.
     BOOL canPromote(POSITION where);
@@ -227,8 +227,8 @@ class BOARD
       (
         // starting and ending position of piece.  the starting
         // position is assumed to be valid.
-	POSITION start,
-	POSITION end
+        POSITION start,
+        POSITION end
       );
 
     // complete check of whether a castle move can be done
@@ -238,9 +238,9 @@ class BOARD
     // TRUE, the ending position of the pawn is returned as well.
     BOOL lastMoveDoublePawn(POSITION &whereDoubleMovedPawn) const
       { 
-	if (wasLastMoveDoublePawn)
-	  whereDoubleMovedPawn = doubleMovedPawn;
-	return(wasLastMoveDoublePawn);
+        if (wasLastMoveDoublePawn)
+          whereDoubleMovedPawn = doubleMovedPawn;
+        return(wasLastMoveDoublePawn);
       }
 
     // front end for helpFindBestMoves.  simply initializes the
@@ -253,11 +253,11 @@ class BOARD
         BESTMOVES *bestMoves
       )
       {
-	metric.materialDiff = 0;
+        metric.materialDiff = 0;
 
-	helpFindBestMoves(lookAhead, moveColor, metric, bestMoves);
+        helpFindBestMoves(lookAhead, moveColor, metric, bestMoves);
 
-	return;
+        return;
       }
 
   };
@@ -311,12 +311,12 @@ class PIECE
     // return list of legal moves for the piece
     virtual void legalMoves
       (
-	// tell piece where it is in board
-	POSITION start,
-	// give it the board, so it knows where other pieces are
-	const BOARD &board,
-	// struture to fill with ending positions of legal moves
-	// from the given start
+        // tell piece where it is in board
+        POSITION start,
+        // give it the board, so it knows where other pieces are
+        const BOARD &board,
+        // struture to fill with ending positions of legal moves
+        // from the given start
         POSITIONLIST &moves
       ) const = 0;
 
